@@ -1,0 +1,13 @@
+{
+  "name": "real-life-quest-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "n 18.13.0 && browser-sync start --server --files 'index.html, app.js, style.css' --port 5567"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
