@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }));
       displayMessage(1);
       questsContainer.classList.remove('hidden');
+      saveToCloud();
     });
   
     questList.addEventListener('click', (e) => {
@@ -55,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (checkBox.checked) {
             questTitle.classList.add('completed');
             completedQuests.appendChild(questItem);
+            saveToCloud();
           } else {
             questTitle.classList.remove('completed');
             questList.appendChild(questItem);
