@@ -109,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const isDev = urlParams.get('dev') === '1';
     if (window.location.hostname === 'localhost' || isDev) {
       const deleteLocalStorageButton = document.createElement('button');
+      deleteLocalStorageButton.classList.add('bg-gray-300', 'hover:bg-gray-400', 'text-gray-800', 'font-bold', 'py-2', 'px-4', 'rounded', 'w-full');
       deleteLocalStorageButton.id = 'delete-local-storage';
       deleteLocalStorageButton.textContent = 'Delete Local Storage';
       document.body.prepend(deleteLocalStorageButton);

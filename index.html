@@ -4,25 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quests at Feels Good Manor</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="/img/favicon.webp">
 </head>
 <body>
-    <header class="container">
-      <h1 class="quest-heading text-4xl font-bold uppercase">Quests!</h1>
-      <h2 class="text-green-500">At Feels Good Manor</h2>
+    <header class="container py-5">
+      <h1 class="quest-heading text-5xl font-bold uppercase mb-2 text-center">Quests!</h1>
+      <h2 class="text-green-500 text-2xl text-center">At Feels Good Manor</h2>
     </header> 
     
-    <main class="container">
+    <main class="container py-5">
       <div class="firework-container"></div>
       <div class="firework-container"></div>
       <div class="firework-container"></div>
       <div id="messages" class="mb-10"></div>
         <form id="user-form">
-          <input id="user-name" type="text" placeholder="Enter your name" required />
-          <button type="submit">Start Quest</button>
+            <input id="user-name" type="text" placeholder="Enter your name" required class="bg-gray-800 text-gray-100 rounded-md py-4 px-4 w-full mb-3" />
+            <button class="py-2 px-4 text-xl bg-green-900 rounded-md py-4 px-4 w-full">
+            Start Quest
+          </button>
         </form>
         <div class="quests-container hidden">
           <h2 class="text-2xl mb-2">Quests</h2>

@@ -1,4 +1,5 @@
 body {
+  padding: 15px;
   color: #fff;
   background: 
     linear-gradient(#0007, #0000),
@@ -10,6 +11,10 @@ body {
 
 h1, h2, h3 {
   color: #fff;
+}
+
+button {
+  border: none !important;
 }
 
 .quest-heading {
