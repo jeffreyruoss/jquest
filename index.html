@@ -5,21 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quests at Feels Good Manor</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/svg+xml" href="/img/favicon.webp">
 </head>
 <body>
     <header class="container">
-        <h1>Quests!</h1>
-        <h2>At Feels Good Manor</h2>
+      <h1 class="quest-heading text-4xl font-bold uppercase">Quests!</h1>
+      <h2 class="text-green-500">At Feels Good Manor</h2>
     </header> 
+    
     <main class="container">
+      <div class="firework-container"></div>
+      <div class="firework-container"></div>
+      <div class="firework-container"></div>
+      <div id="messages" class="mb-10"></div>
         <form id="user-form">
-            <input id="user-name" type="text" placeholder="Enter your name" required />
-            <button type="submit">Start Quest</button>
+          <input id="user-name" type="text" placeholder="Enter your name" required />
+          <button type="submit">Start Quest</button>
         </form>
         <div id="quest-list"></div>
     </main>
 
     <script src="app.js"></script>
+    <script>
+      const messages = {
+        0: "WELCOME! Gather your fellowship, brace for the arcane unknown, and embark on a mythical odyssey at Feels Good Manor.",
+        1: "The world's fate and the essence of magic rest upon your shoulders. Let destiny guide you, ignite your hearts with brilliance, and become legends in this captivating quest!",
+        2: "CONGRATULATIONS ON COMPLETING YOUR FIRST QUEST!! You have shown your courage and strength. Now, prepare yourselves as the journey gets tougher. The real test begins now - mysteries deepen, enemies become fiercer. Keep your wits about you, trust in each other, and let the magic within guide you to glory. Onward, to your next adventure at Feels Good Manor!"
+      }
+    </script>
 </body>
 </html>
