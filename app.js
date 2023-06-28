@@ -105,7 +105,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     // Local Storage Delete Button for Localhost Testing
-    if (window.location.hostname === 'localhost') {
+    const urlParams = new URLSearchParams(window.location.search);
+    const isDev = urlParams.get('dev') === '1';
+    if (window.location.hostname === 'localhost' || isDev) {
       const deleteLocalStorageButton = document.createElement('button');
       deleteLocalStorageButton.id = 'delete-local-storage';
       deleteLocalStorageButton.textContent = 'Delete Local Storage';
