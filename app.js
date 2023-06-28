@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Getting references to DOM elements
     const form = document.querySelector('#user-form');
     const userNameInput = document.querySelector('#user-name');
+    const questsContainer = document.querySelector('.quests-container');
     const questList = document.querySelector('#quest-list');
     const completedQuests = document.querySelector('#completed-quests');
     const container = document.querySelector('main.container');
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
           quests: getQuests()
       }));
       displayMessage(1);
+      questsContainer.classList.remove('hidden');
     });
   
     questList.addEventListener('click', (e) => {
