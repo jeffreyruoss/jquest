@@ -23,6 +23,20 @@ button {
   -webkit-text-fill-color: transparent;
 }
 
+#quest-list li {
+  padding-top:15px;
+  padding-bottom:15px;
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+}
+
+#quest-list input {
+  margin-right: 10px;
+  width: 30px;
+  height: 30px;
+}
+
 #completed-quests input {
   display: none;
 }
