@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.querySelector('main.container');
   const messageDisplay = document.querySelector('#messages');
 
-  // Load data from localStorage if it exists
   const savedData = localStorage.getItem('real-life-quest-app');
   if (savedData) {
       const data = JSON.parse(savedData);
@@ -96,8 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
-
 document.addEventListener('DOMContentLoaded', () => {
     const fireworkContainers = document.querySelectorAll('.firework-container');
     const questList = document.querySelector('#quest-list');
@@ -115,6 +112,25 @@ const addFireworksOnClick = (fireworkContainers) => {
         }
     };
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+    const questList = document.querySelector('#quest-list');
+    const completedQuests = document.querySelector('#completed-quests');
+    questList.addEventListener('click', moveCompletedQuest(completedQuests));
+});
+
+const moveCompletedQuest = (completedQuests) => {
+    return (e) => {
+        if (e.target.tagName === 'INPUT') {
+            const questItem = e.target.parentElement;
+            const questTitle = questItem.querySelector('span');
+            questTitle.classList.add('completed');
+            completedQuests.appendChild(questTitle);
+            questItem.remove();
+        }
+    };
+}
+
 
 
 
