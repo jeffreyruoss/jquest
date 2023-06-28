@@ -132,6 +132,21 @@ const moveCompletedQuest = (completedQuests) => {
 }
 
 
+const questList = document.querySelector('#quest-list');
+questList.addEventListener('click', toggleQuestCompletion);
+
+function toggleQuestCompletion(e) {
+    if (e.target.tagName === 'INPUT') {
+        const questItem = e.target.parentElement;
+        const questTitle = questItem.querySelector('span');
+        const quests = JSON.parse(localStorage.getItem('real-life-quest-app'));
+        const quest = quests.quests.find(quest => quest.title === questTitle.textContent);
+        quest.completed = !quest.completed;
+        localStorage.setItem('real-life-quest-app', JSON.stringify(quests));
+    }
+}
+
+
 
 
 
