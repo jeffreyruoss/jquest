@@ -1,3 +1,5 @@
+// app.js
+
 // Getting references to DOM elements
 const form = document.querySelector('#user-form');
 const userNameInput = document.querySelector('#user-name');
