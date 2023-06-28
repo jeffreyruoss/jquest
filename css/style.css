@@ -1,10 +1,15 @@
 body {
+  color: #fff;
   background: 
     linear-gradient(#0007, #0000),
     #123;
   margin: 0;
   height: 100vh;
   overflow: hidden;
+}
+
+h1, h2, h3 {
+  color: #fff;
 }
 
 .quest-heading {
