@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     function createQuest(title, completed = false, index) {
-      const questItem = document.createElement('div');
+      const questItem = document.createElement('li');
       const checkBox = document.createElement('input');
       checkBox.type = 'checkbox';
       checkBox.checked = completed;
