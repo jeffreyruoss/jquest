@@ -12,22 +12,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load quests from localStorage on page load
     const savedData = localStorage.getItem('real-life-quest-app');
     if (savedData) {
-      const data = JSON.parse(savedData);
-      welcomeUser(data.userName);
-      data.quests.forEach((quest, index) => {
-          createQuest(quest.title, quest.completed, index);
-      });
-      if (data.quests.some(quest => quest.completed)) {
-          displayMessage(2);
-      } else {
-          displayMessage(1);
-      }
+        const data = JSON.parse(savedData);
+        if (data.userName) {
+            questsContainer.classList.remove('hidden');
+        }
+        welcomeUser(data.userName);
+        data.quests.forEach((quest, index) => {
+                createQuest(quest.title, quest.completed, index);
+        });
+        if (data.quests.some(quest => quest.completed)) {
+                displayMessage(2);
+        } else {
+                displayMessage(1);
+        }
     } else {
-      // Add your quests here only if there is no saved data
-      createQuest('First Quest', false, 0);
-      createQuest('Second Quest', false, 1);
-      //...
-      displayMessage(0);
+        // Add your quests here only if there is no saved data
+        createQuest('First Quest', false, 0);
+        createQuest('Second Quest', false, 1);
+        //...
+        displayMessage(0);
     }
   
     form.addEventListener('submit', (e) => {
