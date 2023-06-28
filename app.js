@@ -10,6 +10,9 @@ const container = document.querySelector('main.container');
 const messageDisplay = document.querySelector('#messages');
 const fireworkContainers = document.querySelectorAll('.firework-container');
 
+// connect to the API
+const API_ENDPOINT = 'https://data.rarepepes.com/items/jquest_quests';
+
 function welcomeUser(userName) {
     form.style.display = 'none';
 }
@@ -19,17 +22,18 @@ function displayMessage(index) {
 }
 
 function createQuest(quest) {
+    // console.log(quest);
     const questItem = document.createElement('li');
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
     checkBox.checked = quest.completed;
-  
+    
     const questTitle = document.createElement('span');
     questTitle.textContent = quest.name;
-  
+    
     questItem.appendChild(checkBox);
     questItem.appendChild(questTitle);
-  
+    console.log(quest.completed)
     quest.completed ? completedQuests.appendChild(questItem) : questList.appendChild(questItem);
 }
 
@@ -57,7 +61,7 @@ function loadQuestsFromLocalStorage() {
         }
         welcomeUser(data.userName);
         data.quests.forEach((quest, index) => {
-            createQuest(quest.title, quest.completed, index);
+            // createQuest(quest.title, quest.completed, index);
         });
         if (data.quests.some(quest => quest.completed)) {
             displayMessage(2);
@@ -85,33 +89,33 @@ function onSubmitForm(e) {
 }
 
 function onClickQuestList(e) {
-  if (e.target.tagName === 'INPUT') {
-      const checkBox = e.target;
-      const questItem = checkBox.parentElement;
-      const questTitle = questItem.querySelector('span');
-
-      addFireworks();
-
-      if (checkBox.checked) {
-          questTitle.classList.add('completed');
-          completedQuests.appendChild(questItem);
-          saveToCloud();
-
-          // check if it's the first completed quest and display the message
-          const quests = JSON.parse(localStorage.getItem('real-life-quest-app'));
-          if (!quests.quests.some(quest => quest.completed)) {
-              displayMessage(2);
-          }
-      } else {
-          questTitle.classList.remove('completed');
-          questList.appendChild(questItem);
-      }
-
-      const quests = JSON.parse(localStorage.getItem('real-life-quest-app'));
-      const quest = quests.quests.find(quest => quest.title === questTitle.textContent);
-      quest.completed = checkBox.checked;
-      localStorage.setItem('real-life-quest-app', JSON.stringify(quests));
-  }
+    if (e.target.tagName === 'INPUT') {
+        const checkBox = e.target;
+        const questItem = checkBox.parentElement;
+        const questTitle = questItem.querySelector('span');
+        
+        addFireworks();
+        
+        if (checkBox.checked) {
+            questTitle.classList.add('completed');
+            completedQuests.appendChild(questItem);
+            saveToCloud();
+            
+            // check if it's the first completed quest and display the message
+            const quests = JSON.parse(localStorage.getItem('real-life-quest-app'));
+            if (!quests.quests.some(quest => quest.completed)) {
+                displayMessage(2);
+            }
+        } else {
+            questTitle.classList.remove('completed');
+            questList.appendChild(questItem);
+        }
+        
+        const quests = JSON.parse(localStorage.getItem('real-life-quest-app'));
+        const quest = quests.quests.find(quest => quest.title === questTitle.textContent);
+        quest.completed = checkBox.checked;
+        localStorage.setItem('real-life-quest-app', JSON.stringify(quests));
+    }
 }
 
 
@@ -124,7 +128,7 @@ function checkForLocalStorageDeleteButton() {
         deleteLocalStorageButton.id = 'delete-local-storage';
         deleteLocalStorageButton.textContent = 'Delete Local Storage';
         document.body.prepend(deleteLocalStorageButton);
-
+        
         deleteLocalStorageButton.addEventListener('click', () => {
             localStorage.clear();
             window.location.reload();
@@ -140,24 +144,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// connect to the API
-const API_ENDPOINT = 'https://data.rarepepes.com/items/jquest_quests';
+
 
 window.onload = function() {
     console.log('onload we load all quests from the API');
-  fetch(API_ENDPOINT)
+    fetch(API_ENDPOINT)
     .then(response => response.json())
     .then(data => {
-      const questsContainer = document.querySelector('.quests-container');
-
-      // Iterate over each quest in the response
-// Iterate over each quest in the response
-data.data.forEach((quest, index) => {
-    createQuest(quest);
-  });
-  
+        const questsContainer = document.querySelector('.quests-container');
+        
+        // Iterate over each quest in the response
+        data.data.forEach((quest, index) => {
+            createQuest(quest);
+        });
+        
     })
     .catch(error => {
-      console.error('Error:', error);
+        console.error('Error:', error);
     });
 };
