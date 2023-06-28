@@ -80,28 +80,35 @@ function onSubmitForm(e) {
 }
 
 function onClickQuestList(e) {
-    if (e.target.tagName === 'INPUT') {
-        const checkBox = e.target;
-        const questItem = checkBox.parentElement;
-        const questTitle = questItem.querySelector('span');
+  if (e.target.tagName === 'INPUT') {
+      const checkBox = e.target;
+      const questItem = checkBox.parentElement;
+      const questTitle = questItem.querySelector('span');
 
-        addFireworks();
+      addFireworks();
 
-        if (checkBox.checked) {
-            questTitle.classList.add('completed');
-            completedQuests.appendChild(questItem);
-            saveToCloud();
-        } else {
-            questTitle.classList.remove('completed');
-            questList.appendChild(questItem);
-        }
+      if (checkBox.checked) {
+          questTitle.classList.add('completed');
+          completedQuests.appendChild(questItem);
+          saveToCloud();
 
-        const quests = JSON.parse(localStorage.getItem('real-life-quest-app'));
-        const quest = quests.quests.find(quest => quest.title === questTitle.textContent);
-        quest.completed = checkBox.checked;
-        localStorage.setItem('real-life-quest-app', JSON.stringify(quests));
-    }
+          // check if it's the first completed quest and display the message
+          const quests = JSON.parse(localStorage.getItem('real-life-quest-app'));
+          if (!quests.quests.some(quest => quest.completed)) {
+              displayMessage(2);
+          }
+      } else {
+          questTitle.classList.remove('completed');
+          questList.appendChild(questItem);
+      }
+
+      const quests = JSON.parse(localStorage.getItem('real-life-quest-app'));
+      const quest = quests.quests.find(quest => quest.title === questTitle.textContent);
+      quest.completed = checkBox.checked;
+      localStorage.setItem('real-life-quest-app', JSON.stringify(quests));
+  }
 }
+
 
 function checkForLocalStorageDeleteButton() {
     const urlParams = new URLSearchParams(window.location.search);
