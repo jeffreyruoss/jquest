@@ -18,16 +18,19 @@ function displayMessage(index) {
     messageDisplay.textContent = messages[index];
 }
 
-function createQuest(title, completed = false, index) {
+function createQuest(quest) {
     const questItem = document.createElement('li');
     const checkBox = document.createElement('input');
     checkBox.type = 'checkbox';
-    checkBox.checked = completed;
+    checkBox.checked = quest.completed;
+  
     const questTitle = document.createElement('span');
-    questTitle.textContent = title;
+    questTitle.textContent = quest.name;
+  
     questItem.appendChild(checkBox);
     questItem.appendChild(questTitle);
-    completed ? completedQuests.appendChild(questItem) : questList.appendChild(questItem);
+  
+    quest.completed ? completedQuests.appendChild(questItem) : questList.appendChild(questItem);
 }
 
 function getQuests() {
@@ -62,8 +65,8 @@ function loadQuestsFromLocalStorage() {
             displayMessage(1);
         }
     } else {
-        createQuest('First Quest', false, 0);
-        createQuest('Second Quest', false, 1);
+        createQuest({'name':'First Quest', 'completed':false, 'index':0});
+        createQuest({'name':'Second Quest', 'completed':false, 'index':0});
         displayMessage(0);
     }
 }
@@ -135,3 +138,26 @@ document.addEventListener('DOMContentLoaded', function() {
     questList.addEventListener('click', onClickQuestList);
     checkForLocalStorageDeleteButton();
 });
+
+
+// connect to the API
+const API_ENDPOINT = 'https://data.rarepepes.com/items/jquest_quests';
+
+window.onload = function() {
+    console.log('onload we load all quests from the API');
+  fetch(API_ENDPOINT)
+    .then(response => response.json())
+    .then(data => {
+      const questsContainer = document.querySelector('.quests-container');
+
+      // Iterate over each quest in the response
+// Iterate over each quest in the response
+data.data.forEach((quest, index) => {
+    createQuest(quest);
+  });
+  
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+};

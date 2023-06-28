@@ -8,7 +8,7 @@ body {
     #123;
   margin: 0;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
 }
 
 h1, h2, h3 {
@@ -188,3 +188,6 @@ button {
   animation-delay: -0.4s;
 }
 
+.bordered {
+  border: 1px solid #fff;
+}
