@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }));
       displayMessage(1);
       questsContainer.classList.remove('hidden');
+      addFireworks();
       saveToCloud();
     });
   
