@@ -19,6 +19,13 @@ button {
   border: none !important;
 }
 
+.logo {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin-right: 15px;
+}
+
 .quest-heading {
   background: -webkit-linear-gradient(#a65700, #ffc500);
   -webkit-background-clip: text;
@@ -30,13 +37,28 @@ button {
   padding-bottom:15px;
   display: flex;
   align-items: center;
-  font-size: 18px;
 }
 
 #quest-list input {
   margin-right: 10px;
   width: 30px;
   height: 30px;
+}
+
+#quest-list li .name {
+  color: #fff;
+  font-size: 18px;
+  width: 100%;
+}
+#quest-list li .experience {
+  color: #ccff00;
+  font-size: 14px;
+  padding-right: 10px;
+}
+#quest-list li .description {
+  color: #ccff00;
+  font-size: 14px;
+  width: 100%;
 }
 
 #completed-quests input {
