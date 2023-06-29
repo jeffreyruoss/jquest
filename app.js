@@ -10,12 +10,21 @@ const fireworkContainers = document.querySelectorAll('.firework-container');
 
 // Global quests object
 let quests = {
-  userName: "",
-  quests: []
+  userProfile: {
+    userID: null,
+    username: "",
+    experience: 0,
+    level: 1,
+    health: 100,
+    mana: 100,
+    gold: 0,
+    inventory: [],
+    completedQuests: [],
+  }
 };
 
 // connect to the API
-const API_ENDPOINT = 'https://data.rarepepes.com/items/jquest_quests';
+const API_ENDPOINT = 'https://data.rarepepes.com/items/';
 
 function welcomeUser(userName) {
   form.style.display = 'none';
@@ -30,6 +39,8 @@ function createQuest(quest, index) {
   const checkBox = document.createElement('input');
   checkBox.type = 'checkbox';
   checkBox.checked = quest.completed;
+  // add data attribute quest id to checkbbox
+  checkBox.setAttribute('data-quest-id', quest.id);
   
   // Add flexbox styling to the quest item
   questItem.classList.add('quest-item');
@@ -58,9 +69,89 @@ function createQuest(quest, index) {
   quest.completed ? completedQuests.appendChild(questItem) : questList.appendChild(questItem);
 }
 
+function getUserProfile(userID) {
+  if (localStorage.getItem('questsUserId')) {
+    quests.userProfile.userID = JSON.parse(localStorage.getItem('questsUserId'));
+    userID = quests.userProfile.userID;
+    return new Promise((resolve, reject) => {
+      fetch(API_ENDPOINT + 'jquest_user/' + userID)
+        .then(response => response.json())
+        .then(data => {
+          questsContainer.classList.remove('hidden');
+          form.classList.add('hidden');
+          console.log(data);
+          getQuests();
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    });
+  } else {
+    // There is questUserId in local storage so this is a new user
+    // So proceed to the form
+  }
+}
+
+async function createUserProfile() {
+  const userData = {
+    username: userNameInput.value,
+    experience: quests.userProfile.experience,
+    level: quests.userProfile.level,
+    health: quests.userProfile.health,
+    mana: quests.userProfile.mana,
+    gold: quests.userProfile.gold,
+    inventory: quests.userProfile.inventory,
+    completed_quests: quests.userProfile.completedQuests,
+  };
+
+  try {
+    const response = await fetch(API_ENDPOINT + '/jquest_user', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+  });
+    const data = await response.json();
+    localStorage.setItem('questsUserId', JSON.stringify(data.data.id));
+
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+async function updateUserProfile() {
+  const userData = {
+    username: quests.userProfile.username,
+    experience: quests.userProfile.experience,
+    level: quests.userProfile.level,
+    health: quests.userProfile.health,
+    mana: quests.userProfile.mana,
+    gold: quests.userProfile.gold,
+    inventory: quests.userProfile.inventory,
+    completed_quests: quests.userProfile.completedQuests,
+  };
+
+  try {
+    const response = await fetch(`${API_ENDPOINT}jquest_user/${quests.userProfile.userID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(userData),
+    });
+
+    const data = await response.json();
+    localStorage.setItem('questsUserId', JSON.stringify(data.data.id));
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+
 function getQuests() {
   return new Promise((resolve, reject) => {
-    fetch(API_ENDPOINT)
+    fetch(API_ENDPOINT + 'jquest_quests')
       .then(response => response.json())
       .then(data => {
         // Clear the quests array before adding new quests
@@ -97,39 +188,12 @@ function addFireworks() {
   }, 1500);
 }
 
-function loadQuestsFromLocalStorage() {
-  const savedData = localStorage.getItem('quests');
-  if (savedData) {
-    const data = JSON.parse(savedData);
-    if (data.userName) {
-      questsContainer.classList.remove('hidden');
-    }
-    welcomeUser(data.userName);
-    data.quests.forEach((quest, index) => {
-      createQuest(quest, index);
-    });
-    if (data.quests.some(quest => quest.completed)) {
-      displayMessage(2);
-    } else {
-      displayMessage(1);
-    }
-    // Update the global quests object with the current quests data from local storage
-    quests = data;
-  } else {
-    displayMessage(0);
-  }
-}
-
-function saveToCloud() {
-  localStorage.setItem('quests', JSON.stringify(quests));
-}
-
 function onSubmitForm(e) {
   e.preventDefault();
+  createUserProfile();
   welcomeUser(userNameInput.value);
   getQuests().then(() => {
-    quests.userName = userNameInput.value;
-    localStorage.setItem('quests', JSON.stringify(quests));
+    quests.userProfile.username = userNameInput.value;
     displayMessage(1);
     questsContainer.classList.remove('hidden');
     addFireworks();
@@ -148,10 +212,19 @@ function onClickQuestList(e) {
 
     if (checkBox.checked) {
       questTitleContainer.classList.add('completed');
+
+
+      
+      const questId = checkBox.getAttribute('data-quest-id');
+      quests.userProfile.completedQuests.push(questId);
+      updateUserProfile();
+
+      console.log(quests.userProfile);
+      
+      
       completedQuests.appendChild(questItem);
       saveToCloud();
 
-      // check if it's the first completed quest and display the message
       if (!quests.quests.some(quest => quest.completed)) {
         displayMessage(2);
       }
@@ -177,14 +250,15 @@ function checkForLocalStorageDeleteButton() {
     document.body.prepend(deleteLocalStorageButton);
 
     deleteLocalStorageButton.addEventListener('click', () => {
-      localStorage.removeItem('quests');
+      localStorage.removeItem('questsUserId');
       window.location.reload();
     });
   }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  loadQuestsFromLocalStorage();
+  // loadDataFromLocalStorage();
+  getUserProfile();
   form.addEventListener('submit', onSubmitForm);
   questList.addEventListener('click', onClickQuestList);
   checkForLocalStorageDeleteButton();
