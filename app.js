@@ -140,6 +140,9 @@ async function createUserProfile() {
 
 function updateExperienceDisplay() {
     const totalExperienceElement = document.querySelector('#total-experience');
+    if (totalExperienceElement.classList.contains('hidden')) {
+        totalExperienceElement.classList.remove('hidden');
+    }
     totalExperienceElement.textContent = 'Experience Earned: ' + quests.userProfile.experience;
 }
 
