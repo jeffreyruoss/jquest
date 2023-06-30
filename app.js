@@ -114,7 +114,7 @@ async function createUserProfile() {
   });
     const data = await response.json();
     localStorage.setItem('questsUserId', JSON.stringify(data.data.id));
-
+    quests.userProfile.userID = data.data.id;
   } catch (error) {
     console.error('Error:', error);
   }
@@ -134,7 +134,7 @@ async function updateUserProfile() {
 
   try {
     const response = await fetch(`${API_ENDPOINT}jquest_user/${quests.userProfile.userID}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -213,14 +213,11 @@ function onClickQuestList(e) {
     if (checkBox.checked) {
       questTitleContainer.classList.add('completed');
 
-
-      
       const questId = checkBox.getAttribute('data-quest-id');
       quests.userProfile.completedQuests.push(questId);
       updateUserProfile();
 
       console.log(quests.userProfile);
-      
       
       completedQuests.appendChild(questItem);
       saveToCloud();
@@ -257,7 +254,6 @@ function checkForLocalStorageDeleteButton() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  // loadDataFromLocalStorage();
   getUserProfile();
   form.addEventListener('submit', onSubmitForm);
   questList.addEventListener('click', onClickQuestList);
