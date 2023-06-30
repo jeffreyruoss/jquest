@@ -243,36 +243,54 @@ function onSubmitForm(e) {
     });
 }
 
+async function animateExperience(oldExp, newExp) {
+    let expElement = document.getElementById('total-experience');
+    let step = 5; // Define increment step
+    if (newExp > oldExp) {
+        for (let i = oldExp; i <= newExp; i += step) {
+            expElement.textContent = `Experience Earned: ${i}`;
+            await new Promise(resolve => setTimeout(resolve, 1));
+        }
+        // Ensure that the final value is displayed, even if the loop ends early due to the step size
+        if (newExp % step !== 0) {
+            expElement.textContent = `Experience Earned: ${newExp}`;
+        }
+    } else {
+        expElement.textContent = `Experience Earned: ${newExp}`;
+    }
+}
+
 async function onClickQuestList(e) {
     if (e.target.tagName === 'INPUT') {
         const checkBox = e.target;
         const questItem = checkBox.closest('.quest-item'); 
         const questTitleContainer = questItem.querySelector('.title'); 
         const questDescription = questItem.querySelector('.description');
-        
+
         addFireworks();
-        
+
         if (checkBox.checked) {
             questTitleContainer.classList.add('completed');
             let questId = checkBox.getAttribute('data-quest-id');
             questId = parseInt(questId);
-            
+
             const quest = await getQuest(questId); // Fetch quest content
 
             // Add the questId and the current timestamp
             quests.userProfile.completedQuests.push({ questId: questId, completedAt: Date.now() });
-            
+
+            let oldExperience = quests.userProfile.experience; // Store the old experience
             quests.userProfile.experience += quest.experience; // Add quest experience to total
-            updateExperienceDisplay();
+            animateExperience(oldExperience, quests.userProfile.experience); // Animate experience increment
+
             updateMessageDisplay(quest);  // Update this line to get the description from the data
             // Mark quest as completed
             markAsCompleted(questItem, questId);
-        
+
             updateUserProfile();
-        
+
             completedQuests.appendChild(questItem);
-        } 
-         else {
+        } else {
             questTitleContainer.classList.remove('completed');
             questList.appendChild(questItem);
         }
