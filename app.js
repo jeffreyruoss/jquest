@@ -29,7 +29,7 @@ function welcomeUser(userName) {
 }
 
 function displayMessage(index) {
-    messageDisplay.textContent = messages[index];
+    messageDisplay.html = messages[index];
 }
 
 function createQuest(quest) {
@@ -143,6 +143,10 @@ function updateExperienceDisplay() {
     totalExperienceElement.textContent = 'Experience Earned: ' + quests.userProfile.experience;
 }
 
+function updateMessageDisplay(quest) {
+    messageDisplay.innerHTML = quest.success_content; 
+}
+
 async function updateUserProfile() {
     const userData = {
         username: quests.userProfile.username,
@@ -168,6 +172,19 @@ async function updateUserProfile() {
         localStorage.setItem('questsUserId', JSON.stringify(data.data.id));
     } catch (error) {
         console.error('Error:', error);
+    }
+}
+
+async function getQuest(questId) {
+    try {
+        const response = await fetch(`${API_ENDPOINT}jquest_quests/${questId}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.data;  // If your API response structure has the quest data in data property
+    } catch (error) {
+        console.error('Error fetching success content:', error);
     }
 }
 
@@ -223,11 +240,11 @@ function onSubmitForm(e) {
     });
 }
 
-function onClickQuestList(e) {
+async function onClickQuestList(e) {
     if (e.target.tagName === 'INPUT') {
         const checkBox = e.target;
-        const questItem = checkBox.closest('.quest-item'); // Update this line to find the closest parent element with class 'quest-item'
-        const questTitleContainer = questItem.querySelector('.title'); // Update this line to select the element with class '.title'
+        const questItem = checkBox.closest('.quest-item'); 
+        const questTitleContainer = questItem.querySelector('.title'); 
         const questDescription = questItem.querySelector('.description');
         
         addFireworks();
@@ -236,14 +253,15 @@ function onClickQuestList(e) {
             questTitleContainer.classList.add('completed');
             let questId = checkBox.getAttribute('data-quest-id');
             questId = parseInt(questId);
-        
+            
+            const quest = await getQuest(questId); // Fetch quest content
+
             // Add the questId and the current timestamp
             quests.userProfile.completedQuests.push({ questId: questId, completedAt: Date.now() });
             
-            const quest = quests.quests.find(quest => quest.name === questTitleContainer.textContent);
             quests.userProfile.experience += quest.experience; // Add quest experience to total
             updateExperienceDisplay();
-
+            updateMessageDisplay(quest);  // Update this line to get the description from the data
             // Mark quest as completed
             markAsCompleted(questItem, questId);
         
@@ -256,7 +274,7 @@ function onClickQuestList(e) {
             questList.appendChild(questItem);
         }
 
-        const quest = quests.quests.find(quest => quest.name === questTitleContainer.textContent); // Update this line to get the text content
+        const quest = quests.quests.find(quest => quest.name === questTitleContainer.textContent);
         quest.completed = checkBox.checked;
     }
 }
