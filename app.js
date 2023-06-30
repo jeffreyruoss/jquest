@@ -37,12 +37,18 @@ function displayMessage(index) {
 function createQuest(quest, index) {
   const questItemHTML = `
     <li class="quest-item">
-      <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
-      <div class="quest-title-container">
-        <div class="title">${quest.name}</div>
-        <div class="experience">${quest.experience}</div>
+      <div class="input-column">
+        <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
       </div>
-      <div class="description">${quest.description}</div>
+      <div class="details-column">
+        <div class="quest-details">
+          <div class="title-experience">
+            <div class="title">${quest.name}</div>
+            <div class="experience">XP ${quest.experience}</div>
+          </div>
+          <div class="description">${quest.description}</div>
+        </div>
+      </div>
     </li>
   `;
 
