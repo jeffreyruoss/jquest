@@ -98,6 +98,7 @@ function getUserProfile(userID) {
                 quests.userProfile.level = data.data.level;
                 quests.userProfile.mana = data.data.mana;
                 getQuests();
+                updateExperienceDisplay();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -135,6 +136,11 @@ async function createUserProfile() {
     } catch (error) {
         console.error('Error:', error);
     }
+}
+
+function updateExperienceDisplay() {
+    const totalExperienceElement = document.querySelector('#total-experience');
+    totalExperienceElement.textContent = 'Experience Earned: ' + quests.userProfile.experience;
 }
 
 async function updateUserProfile() {
@@ -234,6 +240,10 @@ function onClickQuestList(e) {
             // Add the questId and the current timestamp
             quests.userProfile.completedQuests.push({ questId: questId, completedAt: Date.now() });
             
+            const quest = quests.quests.find(quest => quest.name === questTitleContainer.textContent);
+            quests.userProfile.experience += quest.experience; // Add quest experience to total
+            updateExperienceDisplay();
+
             // Mark quest as completed
             markAsCompleted(questItem, questId);
         
@@ -245,7 +255,7 @@ function onClickQuestList(e) {
             questTitleContainer.classList.remove('completed');
             questList.appendChild(questItem);
         }
-        
+
         const quest = quests.quests.find(quest => quest.name === questTitleContainer.textContent); // Update this line to get the text content
         quest.completed = checkBox.checked;
     }
