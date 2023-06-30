@@ -7,7 +7,6 @@ body {
     linear-gradient(#0007, #0000),
     #123;
   margin: 0;
-  height: 100vh;
   overflow: auto;
 }
 
@@ -32,30 +31,48 @@ button {
   -webkit-text-fill-color: transparent;
 }
 
-#quest-list li {
+.quest-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-column-gap: 10px;
+  align-items: center;
   padding-top:15px;
   padding-bottom:15px;
+}
+
+.quest-item .input-column {
   display: flex;
   align-items: center;
 }
 
-#quest-list input {
-  margin-right: 10px;
+.quest-item input {
   width: 30px;
   height: 30px;
 }
 
-#quest-list li .name {
-  color: #fff;
-  font-size: 18px;
-  width: 100%;
+.quest-item .details-column {
+  display: flex;
+  flex-direction: column;
 }
-#quest-list li .experience {
-  color: #ccff00;
+
+.quest-item .quest-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.quest-item .title-experience {
+  display: flex;
+  justify-content: space-between;
+}
+
+.quest-item .experience {
+  color: rgb(129, 199, 222);
   font-size: 14px;
   padding-right: 10px;
+  margin-left: 10px;
 }
-#quest-list li .description {
+
+.quest-item .description {
   color: #ccff00;
   font-size: 14px;
   width: 100%;

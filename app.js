@@ -35,39 +35,28 @@ function displayMessage(index) {
 }
 
 function createQuest(quest, index) {
-  const questItem = document.createElement('li');
-  const checkBox = document.createElement('input');
-  checkBox.type = 'checkbox';
-  checkBox.checked = quest.completed;
-  // add data attribute quest id to checkbbox
-  checkBox.setAttribute('data-quest-id', quest.id);
-  
-  // Add flexbox styling to the quest item
-  questItem.classList.add('quest-item');
+  const questItemHTML = `
+    <li class="quest-item">
+      <div class="input-column">
+        <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
+      </div>
+      <div class="details-column">
+        <div class="quest-details">
+          <div class="title-experience">
+            <div class="title">${quest.name}</div>
+            <div class="experience">XP ${quest.experience}</div>
+          </div>
+          <div class="description">${quest.description}</div>
+        </div>
+      </div>
+    </li>
+  `;
 
-  const questTitleContainer = document.createElement('div');
-  questTitleContainer.classList.add('quest-title-container');
-  
-  const questTitle = document.createElement('div');
-  questTitle.classList.add('title');
-  questTitle.textContent = quest.name;
-  
-  const questExperience = document.createElement('div');
-  questExperience.classList.add('experience');
-  questExperience.textContent = quest.experience;
-
-  const questDescription = document.createElement('div');
-  questDescription.classList.add('description');
-  questDescription.textContent = quest.description;
-
-  questItem.appendChild(checkBox);
-  questTitleContainer.appendChild(questTitle);
-  questTitleContainer.appendChild(questExperience);
-  questItem.appendChild(questTitleContainer);
-  questItem.appendChild(questDescription);
-  
-  quest.completed ? completedQuests.appendChild(questItem) : questList.appendChild(questItem);
+  quest.completed 
+    ? completedQuests.insertAdjacentHTML('beforeend', questItemHTML) 
+    : questList.insertAdjacentHTML('beforeend', questItemHTML);
 }
+
 
 function getUserProfile(userID) {
   if (localStorage.getItem('questsUserId')) {
