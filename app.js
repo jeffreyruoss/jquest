@@ -47,7 +47,7 @@ function createQuest(quest) {
     <div class="quest-details">
     <div class="title-experience">
     <div class="title">${quest.name}</div>
-    <div class="experience">XP ${quest.experience}</div>
+    <div class="experience text-blue-300">XP ${quest.experience}</div>
     </div>
     <div class="description">${quest.description}</div>
     <!-- Add a new div for the completed timestamp -->
