@@ -1,5 +1,10 @@
 /* style.css */
 
+html {
+  height: 100%;
+  background-color: #122233;
+}
+
 body {
   padding: 15px;
   color: #fff;
