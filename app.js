@@ -33,26 +33,33 @@ function displayMessage(index) {
 }
 
 function createQuest(quest, index) {
-    const questItemHTML = `
-    <li class="quest-item">
-    <div class="input-column">
-    <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
-    </div>
-    <div class="details-column">
-    <div class="quest-details">
-    <div class="title-experience">
-    <div class="title">${quest.name}</div>
-    <div class="experience">XP ${quest.experience}</div>
-    </div>
-    <div class="description">${quest.description}</div>
-    </div>
-    </div>
-    </li>
-    `;
+  
+  if (quests.userProfile.completedQuests.includes(quest.id)) {
+    // console.log(quest.name);
+    // add to the completed list in the UI
+    return;
+  }
+
+  const questItemHTML = `
+  <li class="quest-item">
+  <div class="input-column">
+  <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
+  </div>
+  <div class="details-column">
+  <div class="quest-details">
+  <div class="title-experience">
+  <div class="title">${quest.name}</div>
+  <div class="experience">XP ${quest.experience}</div>
+  </div>
+  <div class="description">${quest.description}</div>
+  </div>
+  </div>
+  </li>
+  `;
     
-    quest.completed 
-    ? completedQuests.insertAdjacentHTML('beforeend', questItemHTML) 
-    : questList.insertAdjacentHTML('beforeend', questItemHTML);
+  quest.completed 
+  ? completedQuests.insertAdjacentHTML('beforeend', questItemHTML) 
+  : questList.insertAdjacentHTML('beforeend', questItemHTML);
 }
 
 
@@ -66,7 +73,13 @@ function getUserProfile(userID) {
             .then(data => {
                 questsContainer.classList.remove('hidden');
                 form.classList.add('hidden');
-                console.log(data);
+                quests.userProfile.completedQuests = JSON.parse(data.data.completed_quests);
+                quests.userProfile.experience = data.data.experience;
+                quests.userProfile.gold = data.data.gold;
+                quests.userProfile.health = data.data.health;
+                quests.userProfile.inventory = data.data.inventory;
+                quests.userProfile.level = data.data.level;
+                quests.userProfile.mana = data.data.mana;
                 getQuests();
             })
             .catch(error => {
@@ -192,11 +205,12 @@ function onClickQuestList(e) {
         
         if (checkBox.checked) {
             questTitleContainer.classList.add('completed');
-            const questId = checkBox.getAttribute('data-quest-id');
-            quests.userProfile.completedQuests.push(questId);
-            updateUserProfile();
+            let questId = checkBox.getAttribute('data-quest-id');
+            questId = parseInt(questId);
             
-            console.log(quests.userProfile);
+            quests.userProfile.completedQuests.push(questId);
+            console.log(quests.userProfile.completedQuests);
+            updateUserProfile();
             
             completedQuests.appendChild(questItem);
             
