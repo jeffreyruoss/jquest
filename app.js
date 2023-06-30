@@ -1,4 +1,3 @@
-// Getting references to DOM elements
 const form = document.querySelector('#user-form');
 const userNameInput = document.querySelector('#user-name');
 const questsContainer = document.querySelector('.quests-container');
@@ -23,7 +22,6 @@ let quests = {
     }
 };
 
-// connect to the API
 const API_ENDPOINT = 'https://data.rarepepes.com/items/';
 
 function welcomeUser(userName) {
@@ -137,7 +135,6 @@ async function updateUserProfile() {
     }
 }
 
-
 function getQuests() {
     return new Promise((resolve, reject) => {
         fetch(API_ENDPOINT + 'jquest_quests')
@@ -146,7 +143,6 @@ function getQuests() {
             // Clear the quests array before adding new quests
             quests.quests = [];
             
-            // Iterate over each quest in the response
             data.data.forEach((quest, index) => {
                 createQuest(quest, index);
                 // Add the quest to the global quests object
@@ -157,14 +153,10 @@ function getQuests() {
                     completed: false
                 });
             });
-            
-            // Resolve the promise to indicate that the quests have been retrieved successfully
             resolve();
         })
         .catch(error => {
             console.error('Error:', error);
-            
-            // Reject the promise to indicate that there was an error retrieving the quests
             reject(error);
         });
     });
@@ -186,7 +178,6 @@ function onSubmitForm(e) {
         displayMessage(1);
         questsContainer.classList.remove('hidden');
         addFireworks();
-        saveToCloud();
     });
 }
 
@@ -208,7 +199,6 @@ function onClickQuestList(e) {
             console.log(quests.userProfile);
             
             completedQuests.appendChild(questItem);
-            saveToCloud();
             
             if (!quests.quests.some(quest => quest.completed)) {
                 displayMessage(2);
@@ -220,12 +210,10 @@ function onClickQuestList(e) {
         
         const quest = quests.quests.find(quest => quest.name === questTitleContainer.textContent); // Update this line to get the text content
         quest.completed = checkBox.checked;
-        saveToCloud();
     }
 }
 
-
-function checkForLocalStorageDeleteButton() {
+function localStorageDeleteButton() {
     const urlParams = new URLSearchParams(window.location.search);
     const isDev = urlParams.get('dev') === '1';
     if (window.location.hostname === 'localhost' || isDev) {
@@ -246,5 +234,5 @@ document.addEventListener('DOMContentLoaded', function () {
     getUserProfile();
     form.addEventListener('submit', onSubmitForm);
     questList.addEventListener('click', onClickQuestList);
-    checkForLocalStorageDeleteButton();
+    localStorageDeleteButton();
 });
