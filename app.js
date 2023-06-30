@@ -32,36 +32,50 @@ function displayMessage(index) {
     messageDisplay.textContent = messages[index];
 }
 
-function createQuest(quest, index) {
-  
-  if (quests.userProfile.completedQuests.includes(quest.id)) {
-    // console.log(quest.name);
-    // add to the completed list in the UI
-    return;
-  }
+function createQuest(quest) {
+    // Find quest in completedQuests and check if it is completed
+    let completedQuestItem = quests.userProfile.completedQuests.find(item => item.questId === quest.id);
+    quest.completed = completedQuestItem ? completedQuestItem.completedAt : null;
 
-  const questItemHTML = `
-  <li class="quest-item">
-  <div class="input-column">
-  <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
-  </div>
-  <div class="details-column">
-  <div class="quest-details">
-  <div class="title-experience">
-  <div class="title">${quest.name}</div>
-  <div class="experience">XP ${quest.experience}</div>
-  </div>
-  <div class="description">${quest.description}</div>
-  </div>
-  </div>
-  </li>
-  `;
-    
-  quest.completed 
-  ? completedQuests.insertAdjacentHTML('beforeend', questItemHTML) 
-  : questList.insertAdjacentHTML('beforeend', questItemHTML);
+    // quest.completed = quests.userProfile.completedQuests.includes(quest.id);
+    const questItemHTML = `
+    <li class="quest-item">
+    <div class="input-column">
+    <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
+    </div>
+    <div class="details-column">
+    <div class="quest-details">
+    <div class="title-experience">
+    <div class="title">${quest.name}</div>
+    <div class="experience">XP ${quest.experience}</div>
+    </div>
+    <div class="description">${quest.description}</div>
+    <!-- Add a new div for the completed timestamp -->
+    <div class="completed-time">${quest.completed ? 'Completed at ' + new Date(quest.completed).toLocaleString() : ''}</div>
+    </div>
+    </div>
+    </li>
+    `;
+
+    if (quest.completed) {
+        completedQuests.insertAdjacentHTML('beforeend', questItemHTML);
+    } else {
+        questList.insertAdjacentHTML('beforeend', questItemHTML);
+    }
 }
 
+function markAsCompleted(questItem, questId) {
+    // Find the div for the completed time
+    const completedTimeDiv = questItem.querySelector('.completed-time');
+
+    // Update the completed time
+    const completedTime = Date.now();
+    completedTimeDiv.textContent = 'Completed at ' + new Date(completedTime).toLocaleString();
+
+    // Update the quest object
+    let questObject = quests.userProfile.completedQuests.find(item => item.questId === questId);
+    questObject.completedAt = completedTime;
+}
 
 function getUserProfile(userID) {
     if (localStorage.getItem('questsUserId')) {
@@ -73,7 +87,10 @@ function getUserProfile(userID) {
             .then(data => {
                 questsContainer.classList.remove('hidden');
                 form.classList.add('hidden');
+                // Get completed quests and sort by completed timestamp
                 quests.userProfile.completedQuests = JSON.parse(data.data.completed_quests);
+                quests.userProfile.completedQuests.sort((a, b) =>  b.completedAt - a.completedAt );
+
                 quests.userProfile.experience = data.data.experience;
                 quests.userProfile.gold = data.data.gold;
                 quests.userProfile.health = data.data.health;
@@ -156,14 +173,18 @@ function getQuests() {
             // Clear the quests array before adding new quests
             quests.quests = [];
             
+            // Sort quests by order field
+            data.data.sort((a, b) => b.order - a.order);
+
             data.data.forEach((quest, index) => {
                 createQuest(quest, index);
                 // Add the quest to the global quests object
                 quests.quests.push({
+                    id: quest.id,
                     name: quest.name,
                     description: quest.description,
                     experience: quest.experience,
-                    completed: false
+                    completed: quests.userProfile.completedQuests.includes(quest.id)
                 });
             });
             resolve();
@@ -174,6 +195,8 @@ function getQuests() {
         });
     });
 }
+
+
 
 function addFireworks() {
     fireworkContainers.forEach(container => container.classList.add('firework'));
@@ -207,17 +230,18 @@ function onClickQuestList(e) {
             questTitleContainer.classList.add('completed');
             let questId = checkBox.getAttribute('data-quest-id');
             questId = parseInt(questId);
+        
+            // Add the questId and the current timestamp
+            quests.userProfile.completedQuests.push({ questId: questId, completedAt: Date.now() });
             
-            quests.userProfile.completedQuests.push(questId);
-            console.log(quests.userProfile.completedQuests);
+            // Mark quest as completed
+            markAsCompleted(questItem, questId);
+        
             updateUserProfile();
-            
+        
             completedQuests.appendChild(questItem);
-            
-            if (!quests.quests.some(quest => quest.completed)) {
-                displayMessage(2);
-            }
-        } else {
+        } 
+         else {
             questTitleContainer.classList.remove('completed');
             questList.appendChild(questItem);
         }
