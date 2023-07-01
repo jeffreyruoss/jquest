@@ -1,0 +1,29 @@
+/**
+  * fgm_6_30_23 
+  */
+.fgm_6_30_23 {
+  & .name-form-button {
+    background-color: #074E3B;
+  }
+  & h2 {
+    color: rgb(16,185,129);
+  }
+  & .quest-item .description {
+    color: #ccff00;
+  }
+}
+
+/**
+  * castle_graymarsh_7_3_23
+  */
+.castle_graymarsh_7_3_23 {
+  & .name-form-button {
+    background-color:  rgb(92 94 112);    
+  }
+  & h2 {
+    color: rgb(116, 119, 145);
+  }
+  & .quest-item .description {
+    color: #9eb8c8;
+  }
+}

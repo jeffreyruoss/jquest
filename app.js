@@ -1,3 +1,31 @@
+const config = {
+    // eventName: 'fgm_6_30_23',
+    eventName: 'castle_graymarsh_7_3_23',
+}
+
+function eventThemeSetup() {
+    const eventContent = [
+        {
+            'fgm_6_30_23': {
+                'logo': './img/logo-smug-pepe-all-ccff00.png',
+                'subtitle': 'At Feels Good Manor'
+            },
+            'castle_graymarsh_7_3_23': {
+                'logo': './img/castle.webp',
+                'subtitle': 'At Castle Graymarsh'
+            }
+        }
+    ]
+    document.body.classList.add(config.eventName);
+    document.addEventListener('DOMContentLoaded', () => {
+        const logo = document.querySelector('img#logo');
+        const subtitle = document.querySelector('h2#subtitle');
+        logo.src = eventContent[0][config.eventName].logo;
+        subtitle.textContent = eventContent[0][config.eventName].subtitle;
+    });
+}
+eventThemeSetup();
+
 const form = document.querySelector('#user-form');
 const userNameInput = document.querySelector('#user-name');
 const questsContainer = document.querySelector('.quests-container');

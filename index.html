@@ -8,13 +8,14 @@
     <title>Quests at Feels Good Manor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/event-themes.css">
     <link rel="icon" type="image/svg+xml" href="img/favicon.webp">
 </head>
 <body>
     <header class="container py-5">
-      <img class="logo" src='./img/logo-smug-pepe-all-ccff00.png'>
+      <img id="logo" class="logo">
       <h1 class="quest-heading text-5xl font-bold uppercase mb-2 ml-20">Quests!</h1>
-      <h2 class="text-green-500 text-xl ml-20">At Feels Good Manor</h2>
+      <h2 id="subtitle" class="text-xl ml-20"></h2>
     </header> 
     
     <main class="container py-5">
@@ -25,7 +26,7 @@
       <div id="total-experience" class="mb-10 hidden text-blue-300">Experience Earned: [experience]</div>
       <form id="user-form">
           <input id="user-name" type="text" placeholder="Enter your name" required class="bg-gray-800 text-gray-100 rounded-md py-4 px-4 w-full mb-3" />
-          <button class="py-2 px-4 text-xl bg-green-900 rounded-md py-4 px-4 w-full">
+          <button class="name-form-button py-2 px-4 text-xl rounded-md py-4 px-4 w-full">
           Start Questing
         </button>
       </form>
@@ -37,9 +38,9 @@
         <ul id="avatar-stats"></ul>
       </div>
       <div class="p-3 mt-10 quests-container border border-gray-700 hidden">
-        <h2 class="text-3xl mb-2 text-green-500">Available Quests</h2>
+        <h2 class="text-3xl mb-2">Available Quests</h2>
         <ul id="quest-list"></ul>
-        <h2 class="text-3xl mt-10 mb-2 text-green-500">Completed Quests</h2>
+        <h2 class="text-3xl mt-10 mb-2">Completed Quests</h2>
         <ul id="completed-quests"></ul>
       </div>        
     </main>
