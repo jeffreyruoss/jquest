@@ -432,11 +432,15 @@ function localStorageDeleteButton() {
         document.body.prepend(deleteLocalStorageButton);
         
         deleteLocalStorageButton.addEventListener('click', () => {
-            localStorage.removeItem('questsUserId');
-            window.location.reload();
+            const confirmation = confirm("Are you sure you want to delete local storage? This action can't be undone.");
+            if (confirmation) {
+                localStorage.removeItem('questsUserId');
+                window.location.reload();
+            }
         });
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', function () {
     getUserProfile();
