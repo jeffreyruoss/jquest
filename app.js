@@ -32,14 +32,14 @@ function displayMessage(index) {
     messageDisplay.html = messages[index];
 }
 
-function createQuest(quest) {
+function createQuest(quest, eventName) {
     // Find quest in completedQuests and check if it is completed
     let completedQuestItem = quests.userProfile.completedQuests.find(item => item.questId === quest.id);
     quest.completed = completedQuestItem ? completedQuestItem.completedAt : null;
 
     // quest.completed = quests.userProfile.completedQuests.includes(quest.id);
     const questItemHTML = `
-    <li class="quest-item">
+    <li class="quest-item ${eventName}">
     <div class="input-column">
     <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
     </div>
@@ -57,12 +57,19 @@ function createQuest(quest) {
     </li>
     `;
 
-    if (quest.completed) {
-        completedQuests.insertAdjacentHTML('beforeend', questItemHTML);
-    } else {
-        questList.insertAdjacentHTML('beforeend', questItemHTML);
+    // Find or create the UL element for this event_name
+    let eventUl = questList.querySelector(`ul[data-event-name="${eventName}"]`);
+    if (!eventUl) {
+        eventUl = document.createElement('ul');
+        eventUl.dataset.eventName = eventName;
+        eventUl.innerHTML = `<h2>${eventName}</h2>`;
+        questList.appendChild(eventUl);
     }
+
+    // Add the quest to the correct UL element
+    eventUl.insertAdjacentHTML('beforeend', questItemHTML);
 }
+
 
 function markAsCompleted(questItem, questId) {
     // Find the div for the completed time
@@ -192,35 +199,47 @@ async function getQuest(questId) {
 }
 
 function getQuests() {
-    return new Promise((resolve, reject) => {
-        fetch(API_ENDPOINT + 'jquest_quests')
-        .then(response => response.json())
-        .then(data => {
-            // Clear the quests array before adding new quests
-            quests.quests = [];
-            
-            // Sort quests by order field
-            data.data.sort((a, b) => b.order - a.order);
+    return fetch(`${API_ENDPOINT}jquest_quests`)
+    .then(response => response.json())
+    .then(data => {
+        // Create an object where the keys are event_names, and the values are arrays of quests.
+        let questsByEvent = data.data.reduce((groups, quest) => {
+            let group = (groups[quest.event_name] = groups[quest.event_name] || []);
+            group.push(quest);
+            return groups;
+        }, {});
 
-            data.data.forEach((quest, index) => {
-                createQuest(quest, index);
-                // Add the quest to the global quests object
-                quests.quests.push({
-                    id: quest.id,
-                    name: quest.name,
-                    description: quest.description,
-                    experience: quest.experience,
-                    completed: quests.userProfile.completedQuests.includes(quest.id)
-                });
-            });
-            resolve();
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            reject(error);
-        });
+        // Now, questsByEvent is an object where the keys are event_names, and the values are arrays of quests.
+        // For each array of quests, we want to sort the quests by order or date created.
+        for (let event_name in questsByEvent) {
+            questsByEvent[event_name].sort((a, b) => b.order - a.order);
+        }
+
+        // Store the organized quests in the quests object
+        quests.quests = questsByEvent;
+
+        // Now, when we want to display quests, we can iterate through each event_name,
+        // and for each event_name, iterate through each quest.
+        
+        for (let eventName in quests.quests) {
+            for (let quest of quests.quests[eventName]) {
+                createQuest(quest, eventName);
+                
+                // After creating the quest, if it's completed, move it to the completed quests section
+                if (quest.completed) {
+                    const questItem = questList.querySelector(`input[data-quest-id="${quest.id}"]`).closest('.quest-item');
+                    completedQuests.appendChild(questItem);
+                }
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
 }
+
+
+
 
 
 
