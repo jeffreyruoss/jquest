@@ -101,6 +101,7 @@ button {
 .firework::before,
 .firework::after
 {
+  z-index: 2000;
   --initialSize: 0.5vmin;
   --finalSize: 45vmin;
   --particleSize: 0.2vmin;
@@ -233,4 +234,25 @@ button {
 .bordered {
   border: 1px solid #fff;
   overflow: auto;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2em;
+  opacity: 1;
+  transition: opacity 2s ease;
+  z-index: 1000;
+}
+
+.overlay.hide {
+  opacity: 0;
 }

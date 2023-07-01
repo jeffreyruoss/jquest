@@ -75,21 +75,21 @@ function createQuest(quest, eventName) {
 
     // quest.completed = quests.userProfile.completedQuests.includes(quest.id);
     const questItemHTML = `
-    <li class="quest-item ${eventName}">
-    <div class="input-column">
-    <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
-    </div>
-    <div class="details-column">
-    <div class="quest-details">
-    <div class="title-experience">
-    <div class="title">${quest.name}</div>
-    <div class="experience text-blue-300">XP ${quest.experience}</div>
-    </div>
-    <div class="description">${quest.description}</div>
-    <!-- Add a new div for the completed timestamp -->
-    <div class="completed-time">${quest.completed ? 'Completed at ' + new Date(quest.completed).toLocaleString() : ''}</div>
-    </div>
-    </div>
+    <li class="quest-item">
+        <div class="input-column">
+            <input type="checkbox" ${quest.completed ? 'checked' : ''} data-quest-id="${quest.id}">
+        </div>
+        <div class="details-column">
+            <div class="quest-details">
+                <div class="title-experience">
+                    <div class="title">${quest.name}</div>
+                    <div class="experience text-blue-300">XP ${quest.experience}</div>
+                    <div class="gold text-yellow-300">Gold ${quest.gold}</div> <!-- Add this line -->
+                </div>
+                <div class="description">${quest.description}</div>
+                <div class="completed-time">${quest.completed ? 'Completed at ' + new Date(quest.completed).toLocaleString() : ''}</div>
+            </div>
+        </div>
     </li>
     `;
 
@@ -118,7 +118,12 @@ function markAsCompleted(questItem, questId) {
     // Update the quest object
     let questObject = quests.userProfile.completedQuests.find(item => item.questId === questId);
     questObject.completedAt = completedTime;
+
+    // Increase the user's gold by the quest's gold
+    const questGold = parseInt(questItem.querySelector('.gold').textContent.split(' ')[1]);
+    quests.userProfile.gold += questGold;
 }
+
 
 function getUserProfile(userID) {
     if (localStorage.getItem('questsUserId')) {
@@ -197,14 +202,14 @@ async function updateUserProfile() {
     const userData = {
         username: quests.userProfile.username,
         experience: quests.userProfile.experience,
+        gold: quests.userProfile.gold,  // Add this line
         level: quests.userProfile.level,
         health: quests.userProfile.health,
         mana: quests.userProfile.mana,
-        gold: quests.userProfile.gold,
         inventory: quests.userProfile.inventory,
         completed_quests: quests.userProfile.completedQuests,
     };
-    
+
     try {
         const response = await fetch(`${API_ENDPOINT}jquest_user/${quests.userProfile.userID}`, {
             method: 'PATCH',
@@ -213,13 +218,14 @@ async function updateUserProfile() {
             },
             body: JSON.stringify(userData),
         });
-        
+
         const data = await response.json();
         localStorage.setItem('questsUserId', JSON.stringify(data.data.id));
     } catch (error) {
         console.error('Error:', error);
     }
 }
+
 
 async function getQuest(questId) {
     try {
@@ -315,6 +321,54 @@ async function animateExperience(oldExp, newExp) {
     }
 }
 
+async function animateGold(oldGold, newGold) {
+    let goldElement = document.getElementById('total-gold');
+    let step = 5; // Define increment step
+    if (newGold > oldGold) {
+        for (let i = oldGold; i <= newGold; i += step) {
+            goldElement.textContent = `₡ Gold Earned: ${i}`;
+            await new Promise(resolve => setTimeout(resolve, 1));
+        }
+        // Ensure that the final value is displayed, even if the loop ends early due to the step size
+        if (newGold % step !== 0) {
+            goldElement.textContent = `₡ Gold Earned: ${newGold}`;
+        }
+    } else {
+        goldElement.textContent = `₡ Gold Earned: ${newGold}`;
+    }
+}
+
+function showOverlay(quest) {
+    const overlay = document.getElementById('overlay');
+    const message = `
+        <h2>Congratulations!</h2>
+        <p>You have completed: <strong>${quest.name}</strong></p>
+        <p>Experience gained: <strong>${quest.experience}</strong></p>
+        <p>Gold earned: <strong>${quest.gold}</strong></p>
+    `;
+    overlay.innerHTML = message;
+    overlay.style.display = 'flex';
+    setTimeout(() => {
+        overlay.style.display = 'none';
+    }, 2000);
+}
+
+
+function flashMessage(message) {
+    const overlay = document.createElement('div');
+    overlay.classList.add('overlay');
+    overlay.innerHTML = message;
+
+    document.body.appendChild(overlay);
+
+    setTimeout(() => {
+        overlay.classList.add('hide');
+        setTimeout(() => {
+            document.body.removeChild(overlay);
+        }, 2000);
+    }, 2000);
+}
+
 async function onClickQuestList(e) {
     if (e.target.tagName === 'INPUT') {
         const checkBox = e.target;
@@ -333,10 +387,18 @@ async function onClickQuestList(e) {
 
             // Add the questId and the current timestamp
             quests.userProfile.completedQuests.push({ questId: questId, completedAt: Date.now() });
+            
+            window.scrollTo(0, 0); // Scroll to top
+            flashMessage(`Congratulations!<br>+${quest.experience} XP<br>+${quest.gold} Gold!`);
+
 
             let oldExperience = quests.userProfile.experience; // Store the old experience
             quests.userProfile.experience += quest.experience; // Add quest experience to total
             animateExperience(oldExperience, quests.userProfile.experience); // Animate experience increment
+
+            let oldGold = quests.userProfile.gold; // Store the old gold amount
+            quests.userProfile.gold += quest.gold; // Add quest gold to total
+            animateGold(oldGold, quests.userProfile.gold); // Animate gold increment
 
             updateMessageDisplay(quest);  // Update this line to get the description from the data
             // Mark quest as completed
@@ -354,6 +416,7 @@ async function onClickQuestList(e) {
         quest.completed = checkBox.checked;
     }
 }
+
 
 function localStorageDeleteButton() {
     const urlParams = new URLSearchParams(window.location.search);
