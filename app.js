@@ -4,7 +4,7 @@ const config = {
 }
 
 function eventThemeSetup() {
-    const eventContent = [
+    const event_data = 
         {
             'fgm_6_30_23': {
                 'logo': './img/logo-smug-pepe-all-ccff00.png',
@@ -23,16 +23,17 @@ function eventThemeSetup() {
                 'icon': ''
             }
         }
-    ]
+
     document.body.classList.add(config.eventName);
     document.addEventListener('DOMContentLoaded', () => {
         const logo = document.querySelector('img#logo');
         const subtitle = document.querySelector('h2#subtitle');
-        logo.src = eventContent[0][config.eventName].logo;
-        subtitle.textContent = eventContent[0][config.eventName].subtitle;
+        logo.src = event_data[config.eventName].logo;
+        subtitle.textContent = event_data[config.eventName].subtitle;
     });
+    return event_data;
 }
-eventThemeSetup();
+const eventContent = eventThemeSetup();
 
 const form = document.querySelector('#user-form');
 const userNameInput = document.querySelector('#user-name');
@@ -71,6 +72,8 @@ function displayMessage(index) {
 function createQuest(quest, eventName) {
     // Find quest in completedQuests and check if it is completed
     let completedQuestItem = quests.userProfile.completedQuests.find(item => item.questId === quest.id);
+    let eventLocation = eventContent[eventName].location;
+    console.log(eventContent);
     quest.completed = completedQuestItem ? completedQuestItem.completedAt : null;
 
     // quest.completed = quests.userProfile.completedQuests.includes(quest.id);
@@ -98,7 +101,7 @@ function createQuest(quest, eventName) {
     if (!eventUl) {
         eventUl = document.createElement('ul');
         eventUl.dataset.eventName = eventName;
-        eventUl.innerHTML = `<h2>${eventName}</h2>`;
+        eventUl.innerHTML = `<h2>${eventLocation}</h2>`;
         questList.appendChild(eventUl);
     }
 
