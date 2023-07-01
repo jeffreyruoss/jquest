@@ -8,11 +8,19 @@ function eventThemeSetup() {
         {
             'fgm_6_30_23': {
                 'logo': './img/logo-smug-pepe-all-ccff00.png',
-                'subtitle': 'At Feels Good Manor'
+                'subtitle': 'At Feels Good Manor',
+                'location': 'Feels Good Manor',
+                'date': 'June 30, 2023',
+                'color': 'rgb(16,185,129)',
+                'icon': ''
             },
             'castle_graymarsh_7_3_23': {
                 'logo': './img/castle.webp',
-                'subtitle': 'At Castle Graymarsh'
+                'subtitle': 'At Castle Graymarsh',
+                'location': 'Castle Graymarsh',
+                'date': 'July 3, 2023',
+                'color': 'rgb(116, 119, 145)',
+                'icon': ''
             }
         }
     ]
