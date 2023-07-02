@@ -122,9 +122,9 @@ function markAsCompleted(questItem, questId) {
     let questObject = quests.userProfile.completedQuests.find(item => item.questId === questId);
     questObject.completedAt = completedTime;
 
-    // Increase the user's gold by the quest's gold
-    const questGold = parseInt(questItem.querySelector('.gold').textContent.split(' ')[1]);
-    quests.userProfile.gold += questGold;
+    // // Increase the user's gold by the quest's gold
+    // const questGold = parseInt(questItem.querySelector('.gold').textContent.split(' ')[1]);
+    // quests.userProfile.gold += questGold;
 }
 
 
@@ -194,7 +194,7 @@ function updateExperienceDisplay() {
     if (totalExperienceElement.classList.contains('hidden')) {
         totalExperienceElement.classList.remove('hidden');
     }
-    totalExperienceElement.textContent = 'Experience: ' + quests.userProfile.experience;
+    totalExperienceElement.innerHTML = `&#9733;&nbsp;Experience:&nbsp;` + quests.userProfile.experience;
 }
 
 function updateMessageDisplay(quest) {
@@ -205,7 +205,7 @@ async function updateUserProfile() {
     const userData = {
         username: quests.userProfile.username,
         experience: quests.userProfile.experience,
-        gold: quests.userProfile.gold,  // Add this line
+        gold: quests.userProfile.gold,
         level: quests.userProfile.level,
         health: quests.userProfile.health,
         mana: quests.userProfile.mana,
@@ -312,15 +312,15 @@ async function animateExperience(oldExp, newExp) {
     let step = 5; // Define increment step
     if (newExp > oldExp) {
         for (let i = oldExp; i <= newExp; i += step) {
-            expElement.textContent = `Experience Earned: ${i}`;
+            expElement.innerHTML = `&#9733;&nbsp;Experience: ${i}`;
             await new Promise(resolve => setTimeout(resolve, 1));
         }
         // Ensure that the final value is displayed, even if the loop ends early due to the step size
         if (newExp % step !== 0) {
-            expElement.textContent = `Experience Earned: ${newExp}`;
+            expElement.innerHTML = `&#9733;&nbsp;Experience: ${newExp}`;
         }
     } else {
-        expElement.textContent = `Experience Earned: ${newExp}`;
+        expElement.innerHTML = `&#9733;&nbsp;Experience: ${newExp}`;
     }
 }
 
@@ -329,15 +329,27 @@ async function animateGold(oldGold, newGold) {
     let step = 5; // Define increment step
     if (newGold > oldGold) {
         for (let i = oldGold; i <= newGold; i += step) {
-            goldElement.textContent = `₡ Gold Earned: ${i}`;
-            await new Promise(resolve => setTimeout(resolve, 1));
+            goldElement.innerHTML = `
+            <span class="ui-icon">
+                <img src="./img/ui-icons/gold-coin-icon.png">
+            </span>
+            Gold: ${i}`;
+            await new Promise(resolve => setTimeout(resolve, 2));
         }
         // Ensure that the final value is displayed, even if the loop ends early due to the step size
         if (newGold % step !== 0) {
-            goldElement.textContent = `₡ Gold Earned: ${newGold}`;
+            goldElement.innerHTML = `
+            <span class="ui-icon">
+                <img src="./img/ui-icons/gold-coin-icon.png">
+            </span>
+            Gold: ${newGold}`;
         }
     } else {
-        goldElement.textContent = `₡ Gold Earned: ${newGold}`;
+        goldElement.innerHTML = `
+        <span class="ui-icon">
+            <img src="./img/ui-icons/gold-coin-icon.png">
+        </span>
+        Gold: ${newGold}`;
     }
 }
 

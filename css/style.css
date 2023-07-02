@@ -37,6 +37,10 @@ button {
   -webkit-text-fill-color: transparent;
 }
 
+#quest-list h2 {
+  margin-top: 20px;
+}
+
 .ui-icon {
   padding-top: 3px;
   margin-right: 3px;
@@ -49,7 +53,7 @@ button {
   display: grid;
   grid-template-columns: auto 1fr;
   grid-column-gap: 10px;
-  align-items: center;
+  align-items: flex-start;
   padding-top:15px;
   padding-bottom:15px;
 }
@@ -67,6 +71,7 @@ button {
 .quest-item .details-column {
   display: flex;
   flex-direction: column;
+  margin-top: -7px;
 }
 
 .quest-item .quest-details {
@@ -80,6 +85,12 @@ button {
 }
 
 .quest-item .experience {
+  font-size: 14px;
+  padding-right: 10px;
+  margin-left: 10px;
+}
+
+.quest-item .gold {
   font-size: 14px;
   padding-right: 10px;
   margin-left: 10px;
@@ -241,9 +252,11 @@ button {
 }
 
 .bordered {
-  border: 1px solid #fff;
-  overflow: auto;
+  border: 1px solid #888;
+  padding: 20px;
+  border-radius: 5px;
 }
+
 
 .overlay {
   position: fixed;
@@ -274,4 +287,22 @@ button {
 }
 .gain-gold{
   color: gold;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  background: #000;
+  width: 100%;
+  padding: 20px;
+}
+
+.column {
+  flex: 1;
+}
+
+#completed-quests {
+  margin-bottom: 50px;
 }
