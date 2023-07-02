@@ -195,12 +195,24 @@ function updateStatsDisplay() {
     if (totalExperienceElement.classList.contains('hidden')) {
         totalExperienceElement.classList.remove('hidden');
     }
-
-    totalExperienceElement.innerHTML = `&#9733;&nbsp;Experience:&nbsp;` + quests.userProfile.experience;
-    totalGoldElement.innerHTML = `&#9733;&nbsp;Gold:&nbsp;` + quests.userProfile.gold;
-    totalLevelElement.innerHTML = `&#9733;&nbsp;Level:&nbsp;` + quests.userProfile.level;
-    totalHealthElement.innerHTML = `&#9733;&nbsp;Health:&nbsp;` + quests.userProfile.health;
-    totalManaElement.innerHTML = `&#9733;&nbsp;Mana:&nbsp;` + quests.userProfile.mana;
+    totalExperienceElement.innerHTML = `${quests.userProfile.level}`;
+    totalExperienceElement.innerHTML = `&#9733 Experience: ${quests.userProfile.experience}`;
+    totalGoldElement.innerHTML = `
+    <span class="ui-icon">
+        <img src="./img/ui-icons/gold-coin-icon.png">
+    </span>
+    Gold: ${quests.userProfile.gold}`;
+    
+    totalHealthElement.innerHTML = `
+    <span class="ui-icon">
+        <img src="./img/ui-icons/health-heart-icon.png">
+    </span>
+    Health: ${quests.userProfile.health}`;
+    totalManaElement.innerHTML = `
+    <span class="ui-icon">
+        <img src="./img/ui-icons/mana-lightning-icon.png">
+    </span>
+    Mana: ${quests.userProfile.mana}`;
 }
 
 
