@@ -253,15 +253,25 @@ button {
   height: 100%;
   background: rgba(0, 0, 0, 0.8);
   color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  flex-direction: column; /* Set the direction of the flex items to column */
   font-size: 2em;
   opacity: 1;
   transition: opacity 2s ease;
   z-index: 1000;
 }
 
+
 .overlay.hide {
   opacity: 0;
+}
+
+
+.gain-xp { 
+  color:aqua
+}
+.gain-gold{
+  color: gold;
 }
