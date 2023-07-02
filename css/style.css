@@ -37,6 +37,14 @@ button {
   -webkit-text-fill-color: transparent;
 }
 
+.ui-icon {
+  padding-top: 3px;
+  margin-right: 3px;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+}
+
 .quest-item {
   display: grid;
   grid-template-columns: auto 1fr;
