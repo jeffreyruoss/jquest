@@ -121,10 +121,6 @@ function markAsCompleted(questItem, questId) {
     // Update the quest object
     let questObject = quests.userProfile.completedQuests.find(item => item.questId === questId);
     questObject.completedAt = completedTime;
-
-    // // Increase the user's gold by the quest's gold
-    // const questGold = parseInt(questItem.querySelector('.gold').textContent.split(' ')[1]);
-    // quests.userProfile.gold += questGold;
 }
 
 
@@ -149,7 +145,7 @@ function getUserProfile(userID) {
                 quests.userProfile.level = data.data.level;
                 quests.userProfile.mana = data.data.mana;
                 getQuests();
-                updateExperienceDisplay();
+                updateStatsDisplay();
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -189,13 +185,24 @@ async function createUserProfile() {
     }
 }
 
-function updateExperienceDisplay() {
+function updateStatsDisplay() {
     const totalExperienceElement = document.querySelector('#total-experience');
+    const totalGoldElement = document.querySelector('#total-gold');
+    const totalLevelElement = document.querySelector('#total-level');
+    const totalHealthElement = document.querySelector('#total-health');
+    const totalManaElement = document.querySelector('#total-mana');
+
     if (totalExperienceElement.classList.contains('hidden')) {
         totalExperienceElement.classList.remove('hidden');
     }
+
     totalExperienceElement.innerHTML = `&#9733;&nbsp;Experience:&nbsp;` + quests.userProfile.experience;
+    totalGoldElement.innerHTML = `&#9733;&nbsp;Gold:&nbsp;` + quests.userProfile.gold;
+    totalLevelElement.innerHTML = `&#9733;&nbsp;Level:&nbsp;` + quests.userProfile.level;
+    totalHealthElement.innerHTML = `&#9733;&nbsp;Health:&nbsp;` + quests.userProfile.health;
+    totalManaElement.innerHTML = `&#9733;&nbsp;Mana:&nbsp;` + quests.userProfile.mana;
 }
+
 
 function updateMessageDisplay(quest) {
     messageDisplay.innerHTML = quest.success_content; 
