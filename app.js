@@ -194,7 +194,7 @@ function updateExperienceDisplay() {
     if (totalExperienceElement.classList.contains('hidden')) {
         totalExperienceElement.classList.remove('hidden');
     }
-    totalExperienceElement.textContent = 'Experience Earned: ' + quests.userProfile.experience;
+    totalExperienceElement.textContent = 'Experience: ' + quests.userProfile.experience;
 }
 
 function updateMessageDisplay(quest) {
@@ -392,7 +392,7 @@ async function onClickQuestList(e) {
             quests.userProfile.completedQuests.push({ questId: questId, completedAt: Date.now() });
             
             window.scrollTo(0, 0); // Scroll to top
-            flashMessage(`Congratulations!<br>+${quest.experience} XP<br>+${quest.gold} Gold!`);
+            flashMessage(`<div >Congratulations!<br></div><div><span class="gain-xp">+${quest.experience}</span> XP</div><div><span class="gain-gold">+${quest.gold}</span> Gold!</div>`);
 
 
             let oldExperience = quests.userProfile.experience; // Store the old experience
