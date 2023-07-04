@@ -283,54 +283,62 @@ async function getQuest(questId) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data.data;  // If your API response structure has the quest data in data property
+        return data.data; 
     } catch (error) {
         console.error('Error fetching success content:', error);
     }
 }
 
-function getQuests() {
-    return fetch(`${API_ENDPOINT}jquest_quests`)
-    .then(response => response.json())
-    .then(data => {
-        // Create an object where the keys are event_names, and the values are arrays of quests.
-        let questsByEvent = data.data.reduce((groups, quest) => {
-            let group = (groups[quest.event_name] = groups[quest.event_name] || []);
-            group.push(quest);
-            return groups;
-        }, {});
+function getQuests(eventName) {
+    // if no event name is passed in, get all quests from the config event_name
+    let url;
+    if (!eventName) {
+        url = `${API_ENDPOINT}jquest_quests?filter[event_name][_contains]=schnaars`
+    } 
+    else {
+        url = `${API_ENDPOINT}jquest_quests?filter[event_name][_eq]=${eventName}`
+    }        
 
-        // Now, questsByEvent is an object where the keys are event_names, and the values are arrays of quests.
-        // For each array of quests, we want to sort the quests by order or date created.
-        for (let event_name in questsByEvent) {
-            questsByEvent[event_name].sort((a, b) => b.order - a.order);
-        }
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            let questsByEvent = data.data.reduce((groups, quest) => {
+                let group = (groups[quest.event_name] = groups[quest.event_name] || []);
+                group.push(quest);
+                return groups;
+            }, {});
 
-        // Store the organized quests in the quests object
-        quests.quests = questsByEvent;
+            for (let event_name in questsByEvent) {
+                questsByEvent[event_name].sort((a, b) => {
+                    let dateA = parseDateFromEventName(a.event_name);
+                    let dateB = parseDateFromEventName(b.event_name);
+                    return dateB - dateA;
+                });
+            }
 
-        // Now, when we want to display quests, we can iterate through each event_name,
-        // and for each event_name, iterate through each quest.
-        
-        for (let eventName in quests.quests) {
-            for (let quest of quests.quests[eventName]) {
-                createQuest(quest, eventName);
-                
-                // After creating the quest, if it's completed, move it to the completed quests section
-                if (quest.completed) {
-                    const questItem = questList.querySelector(`input[data-quest-id="${quest.id}"]`).closest('.quest-item');
-                    completedQuests.appendChild(questItem);
+            quests.quests = questsByEvent;
+
+            for (let eventName in quests.quests) {
+                for (let quest of quests.quests[eventName]) {
+                    createQuest(quest, eventName);
+                    if (quest.completed) {
+                        const questItem = questList.querySelector(`input[data-quest-id="${quest.id}"]`).closest('.quest-item');
+                        completedQuests.appendChild(questItem);
+                    }
                 }
             }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 
-
+function parseDateFromEventName(eventName) {
+    let dateSection = eventName.split('_').slice(-3).join('_');
+    let [month, day, year] = dateSection.split('_').map(Number);
+    return new Date(year + 2000, month - 1, day);
+}
 
 
 
