@@ -307,8 +307,9 @@ button {
   padding: 20px;
 }
 
-.column {
+.stats .column {
   flex: 1;
+  text-align: center;
 }
 
 #completed-quests {
@@ -319,4 +320,17 @@ button {
   font-size: .5em;
   color: #fff;
   margin-bottom: 10px;
+}
+
+#total-experience .value {
+  color: aqua;
+}
+#total-experience .ui-icon {
+  color: aqua;
+  width: 15px;
+  height: 15px;
+}
+
+#total-gold .value {
+  color: gold
 }

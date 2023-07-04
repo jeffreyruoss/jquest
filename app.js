@@ -221,33 +221,22 @@ async function createUserProfile() {
 }
 
 function updateStatsDisplay() {
-    const totalExperienceElement = document.querySelector('#total-experience');
-    const totalGoldElement = document.querySelector('#total-gold');
-    const totalLevelElement = document.querySelector('#total-level');
-    const totalHealthElement = document.querySelector('#total-health');
-    const totalManaElement = document.querySelector('#total-mana');
+    const totalExperienceElement = document.querySelector('#total-experience .value');
+    const totalGoldElement = document.querySelector('#total-gold .value');
+    const totalLevelElement = document.querySelector('#total-level .value');
+    const totalHealthElement = document.querySelector('#total-health .value');
+    const totalManaElement = document.querySelector('#total-mana .value');
 
     if (totalExperienceElement.classList.contains('hidden')) {
         totalExperienceElement.classList.remove('hidden');
     }
     totalExperienceElement.innerHTML = `${quests.userProfile.level}`;
-    totalExperienceElement.innerHTML = `&#9733 Experience: ${quests.userProfile.experience}`;
-    totalGoldElement.innerHTML = `
-    <span class="ui-icon">
-        <img src="./img/ui-icons/gold-coin-icon.png">
-    </span>
-    Gold: ${quests.userProfile.gold}`;
+    totalExperienceElement.innerHTML = `${quests.userProfile.experience}</span>
+    `;
+    totalGoldElement.innerHTML = `${quests.userProfile.gold}</span>`;
     
-    totalHealthElement.innerHTML = `
-    <span class="ui-icon">
-        <img src="./img/ui-icons/health-heart-icon.png">
-    </span>
-    Health: ${quests.userProfile.health}`;
-    totalManaElement.innerHTML = `
-    <span class="ui-icon">
-        <img src="./img/ui-icons/mana-lightning-icon.png">
-    </span>
-    Mana: ${quests.userProfile.mana}`;
+    totalHealthElement.innerHTML = `${quests.userProfile.health}</span>`;
+    totalManaElement.innerHTML = `<span class="value">${quests.userProfile.mana}</span>`;
 }
 
 
@@ -379,27 +368,19 @@ async function animateExperience(oldExp, newExp) {
 }
 
 async function animateGold(oldGold, newGold) {
-    let goldElement = document.getElementById('total-gold');
+    let totalGold = document.querySelector('#total-gold .value');
     let step = 5; // Define increment step
     if (newGold > oldGold) {
         for (let i = oldGold; i <= newGold; i += step) {
-            goldElement.innerHTML = `
-            <span class="ui-icon">
-                <img src="./img/ui-icons/gold-coin-icon.png">
-            </span>
-            Gold: ${i}`;
+            totalGold.innerHTML = `${i}`;
             await new Promise(resolve => setTimeout(resolve, 2));
         }
         // Ensure that the final value is displayed, even if the loop ends early due to the step size
         if (newGold % step !== 0) {
-            goldElement.innerHTML = `
-            <span class="ui-icon">
-                <img src="./img/ui-icons/gold-coin-icon.png">
-            </span>
-            Gold: ${newGold}`;
+            totalGold.innerHTML = `${newGold}`;
         }
     } else {
-        goldElement.innerHTML = `
+        totalGold.innerHTML = `
         <span class="ui-icon">
             <img src="./img/ui-icons/gold-coin-icon.png">
         </span>
