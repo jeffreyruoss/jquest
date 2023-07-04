@@ -264,6 +264,7 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
+  padding: 20px;
   background: rgba(0, 0, 0, 0.8);
   color: white;
   display: flex;  
@@ -285,10 +286,17 @@ button {
 .gain-xp { 
   color:aqua
 }
-.gain-gold{
+.gain-gold {
   color: gold;
 }
-
+.gain-xp .ui-icon {
+  width: 50px;
+  height: 36px;
+}
+.gain-gold .ui-icon {
+  width: 50px;
+  height: 36px;
+}
 .stats {
   display: flex;
   justify-content: space-between;
@@ -305,4 +313,10 @@ button {
 
 #completed-quests {
   margin-bottom: 50px;
+}
+
+.quest-completed-name {
+  font-size: .5em;
+  color: #fff;
+  margin-bottom: 10px;
 }

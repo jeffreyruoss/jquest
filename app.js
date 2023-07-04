@@ -21,6 +21,30 @@ function eventThemeSetup() {
                 'date': 'July 3, 2023',
                 'color': 'rgb(116, 119, 145)',
                 'icon': ''
+            },
+            'disc_golf_7_2_23': {
+                'logo': './img/castle.webp',
+                'subtitle': 'We manipulate reality.',
+                'location': 'Boyertown Park Disc Golf Course',
+                'date': 'July 2, 2023',
+                'color': 'rgb(116, 119, 145)',
+                'icon': ''
+            },
+            'dmig_7_2_32': {
+                'logo': './img/castle.webp',
+                'subtitle': 'Game of Boards',
+                'location': 'Deal Me In Games',
+                'date': 'July 3, 2023',
+                'color': 'rgb(116, 119, 145)',
+                'icon': ''
+            },
+            'schnaars_estate_7_4_23': {
+                'logo': './img/castle.webp',
+                'subtitle': 'Schnaars in Charge',
+                'location': 'Schnaars Estate',
+                'date': 'July 4, 2023',
+                'color': 'rgb(116, 119, 145)',
+                'icon': ''
             }
         }
 
@@ -70,6 +94,9 @@ function displayMessage(index) {
 }
 
 function createQuest(quest, eventName) {
+    if (eventContent[eventName].location===undefined) {
+        eventContent[eventName].location = "General";  // assigning a default value if location is undefined
+    }
     // Find quest in completedQuests and check if it is completed
     let completedQuestItem = quests.userProfile.completedQuests.find(item => item.questId === quest.id);
     let eventLocation = eventContent[eventName].location;
@@ -399,8 +426,8 @@ function flashMessage(message) {
         overlay.classList.add('hide');
         setTimeout(() => {
             document.body.removeChild(overlay);
-        }, 2000);
-    }, 2000);
+        }, 5000);
+    }, 5000);
 }
 
 async function onClickQuestList(e) {
@@ -423,7 +450,19 @@ async function onClickQuestList(e) {
             quests.userProfile.completedQuests.push({ questId: questId, completedAt: Date.now() });
             
             window.scrollTo(0, 0); // Scroll to top
-            flashMessage(`<div >Congratulations!<br></div><div><span class="gain-xp">+${quest.experience}</span> XP</div><div><span class="gain-gold">+${quest.gold}</span> Gold!</div>`);
+            flashMessage(`
+            <div>Quest Complete!</div>
+            <div class="quest-completed-name">${quest.name}</div>
+                
+            <div>
+                <span class="gain-xp">+<span class="ui-icon">&#9733;</span>${quest.experience}</span> XP
+            </div>
+            <div>
+                <span class="gain-gold">+ <span class="ui-icon">
+                    <img src="./img/ui-icons/gold-coin-icon.png">
+                </span>${quest.gold}</span> Gold!
+            </div>
+            `);
 
 
             let oldExperience = quests.userProfile.experience; // Store the old experience
