@@ -1,6 +1,7 @@
 const config = {
     // eventName: 'fgm_6_30_23',
-    eventName: 'castle_graymarsh_7_3_23',
+    // eventName: 'castle_graymarsh_7_3_23',
+    eventName: 'schnaars_estate_7_4_23',
 }
 
 function eventThemeSetup() {
@@ -102,13 +103,15 @@ function displayMessage(index) {
 }
 
 function createQuest(quest, eventName) {
-    if (eventContent[eventName].location===undefined) {
-        eventContent[eventName].location = "General";  // assigning a default value if location is undefined
-    }
+    console.log(quest); // Log the quest object
+
+    // if (eventContent[eventName].location===undefined) {
+    //     eventContent[eventName].location = "General";  // assigning a default value if location is undefined
+    // }
     // Find quest in completedQuests and check if it is completed
     let completedQuestItem = quests.userProfile.completedQuests.find(item => item.questId === quest.id);
+    console.log(eventContent[eventName].location);
     let eventLocation = eventContent[eventName].location;
-    console.log(eventContent);
     quest.completed = completedQuestItem ? completedQuestItem.completedAt : null;
 
     // quest.completed = quests.userProfile.completedQuests.includes(quest.id);
