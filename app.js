@@ -14,6 +14,14 @@ function eventThemeSetup() {
                 'color': 'rgb(16,185,129)',
                 'icon': ''
             },
+            'fgm_7_1_23': {
+                'logo': './img/logo-smug-pepe-all-ccff00.png',
+                'subtitle': 'At Feels Good Manor',
+                'location': 'Feels Good Manor',
+                'date': 'July 1, 2023',
+                'color': 'rgb(16,185,129)',
+                'icon': ''
+            },
             'castle_graymarsh_7_3_23': {
                 'logo': './img/castle.webp',
                 'subtitle': 'At Castle Graymarsh',
@@ -30,7 +38,7 @@ function eventThemeSetup() {
                 'color': 'rgb(116, 119, 145)',
                 'icon': ''
             },
-            'dmig_7_2_32': {
+            'dmig_7_2_23': {
                 'logo': './img/castle.webp',
                 'subtitle': 'Game of Boards',
                 'location': 'Deal Me In Games',
