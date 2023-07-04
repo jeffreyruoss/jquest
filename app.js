@@ -230,12 +230,12 @@ function updateStatsDisplay() {
     if (totalExperienceElement.classList.contains('hidden')) {
         totalExperienceElement.classList.remove('hidden');
     }
-    totalExperienceElement.innerHTML = `${quests.userProfile.level}`;
-    totalExperienceElement.innerHTML = `${quests.userProfile.experience}</span>
+    totalExperienceElement.innerHTML = `<span class="value">${quests.userProfile.level}</span>`;
+    totalExperienceElement.innerHTML = `<span class="value">${quests.userProfile.experience}</span>
     `;
-    totalGoldElement.innerHTML = `${quests.userProfile.gold}</span>`;
+    totalGoldElement.innerHTML = `<span class="value">${quests.userProfile.gold}</span>`;
     
-    totalHealthElement.innerHTML = `${quests.userProfile.health}</span>`;
+    totalHealthElement.innerHTML = `<span class="value">${quests.userProfile.health}</span>`;
     totalManaElement.innerHTML = `<span class="value">${quests.userProfile.mana}</span>`;
 }
 
@@ -351,19 +351,19 @@ function onSubmitForm(e) {
 }
 
 async function animateExperience(oldExp, newExp) {
-    let expElement = document.getElementById('total-experience');
+    let expElement = document.querySelector('#total-experience .value');
     let step = 5; // Define increment step
     if (newExp > oldExp) {
         for (let i = oldExp; i <= newExp; i += step) {
-            expElement.innerHTML = `&#9733;&nbsp;Experience: ${i}`;
+            expElement.innerHTML = `${i}`;
             await new Promise(resolve => setTimeout(resolve, 1));
         }
         // Ensure that the final value is displayed, even if the loop ends early due to the step size
         if (newExp % step !== 0) {
-            expElement.innerHTML = `&#9733;&nbsp;Experience: ${newExp}`;
+            expElement.innerHTML = `${newExp}`;
         }
     } else {
-        expElement.innerHTML = `&#9733;&nbsp;Experience: ${newExp}`;
+        expElement.innerHTML = `${newExp}`;
     }
 }
 
